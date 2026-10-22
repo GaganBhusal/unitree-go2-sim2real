@@ -51,32 +51,7 @@
 
 </div>
 
----
 
-## Table of Contents
-- [Overview](#overview)
-- [Method & Architecture](#method--architecture)
-  - [Control Hierarchy & Rates](#control-hierarchy--rates)
-  - [Observation Space](#observation-space)
-  - [Action Space](#action-space)
-  - [Domain Randomization](#domain-randomization)
-  - [Reward Formulation](#reward-formulation)
-  - [PD Gain Selection & Actuator Dynamics](#pd-gain-selection--actuator-dynamics)
-  - [Sim-to-Real Transfer Pipeline](#sim-to-real-transfer-pipeline)
-- [Hardware Experiments](#hardware-experiments)
-  - [Actuator Gain Sweep](#actuator-gain-sweep)
-  - [Failure Modes & Safety Cutoffs](#failure-modes--safety-cutoffs)
-- [Limitations](#limitations)
-- [Repo Structure](#repo-structure)
-- [Setup and Usage](#setup-and-usage)
-  - [1. Environment Setup](#1-environment-setup)
-  - [2. Simulation Training](#2-simulation-training)
-  - [3. Pretrained Policy Playback (go2_walk_seven / model_10000.pt)](#3-pretrained-policy-playback-go2_walk_seven--model_10000pt)
-  - [4. Real Hardware Deployment](#4-real-hardware-deployment)
-- [Acknowledgements & References](#acknowledgements--references)
-- [License](#license)
-
----
 
 ## Overview
 
@@ -338,27 +313,27 @@ During physical tuning, we tested various gain combinations on real ground surfa
 ```text
 go2_sim2real/
 ├── configs/
-│   ├── env_configs.py              # Unified WalkEnvCfg combining all sub-configs
-│   ├── sim_config.py              # Genesis simulator settings (dt=0.02, 10 substeps)
-│   ├── robot_config.py            # Go2 URDF paths, joint limits, nominal stance
-│   ├── task_config.py             # Velocity ranges, reward scales, gait clock periods
-│   ├── domain_randomize_config.py # DR bounds (mass, CoM, friction, Kp, Kd, pushes)
-│   └── train_params.yaml          # PPO actor-critic network hyperparameters
+│   ├── env_configs.py
+│   ├── sim_config.py
+│   ├── robot_config.py
+│   ├── task_config.py
+│   ├── domain_randomize_config.py
+│   └── train_params.yaml
 ├── src/
 │   └── env/
-│       ├── base_env.py            # Base vectorized quadruped environment in Genesis
-│       ├── env_walk_feet_rewards.py # Walking environment with gait & foot rewards
-│       └── rewards.py             # Modular reward computation functions
+│       ├── base_env.py
+│       ├── env_walk_feet_rewards.py
+│       └── rewards.py
 ├── scripts/
-│   ├── train.py                   # Main PPO training script using Genesis + rsl_rl
-│   └── walk_controller_with_keyboard.py # Interactive keyboard sim evaluation
+│   ├── train.py
+│   └── walk_controller_with_keyboard.py
 ├── unitree_sdk2_python/
 │   └── example/go2/low_level/
-│       └── custom_test_file.py    # Zero-shot real robot deployment script (500Hz/50Hz)
+│       └── custom_test_file.py
 ├── deployment/
-│   └── go2_walk_deployment.py     # Standalone deployment utilities
-├── logs/                          # Checkpoints and TensorBoard event logs
-├── requirements.txt               # Python package dependencies
+│   └── go2_walk_deployment.py
+├── logs/
+├── requirements.txt
 └── README.md
 ```
 
@@ -371,7 +346,7 @@ go2_sim2real/
 Clone this repository and create a dedicated Conda environment:
 
 ```bash
-git clone https://github.com/<your-username>/go2_sim2real.git
+git clone git@github.com:GaganBhusal/unitree-go2-sim2real.git
 cd go2_sim2real
 
 conda create -n rl_robot python=3.10 -y
@@ -457,7 +432,7 @@ sudo $(which python) unitree_sdk2_python/example/go2/low_level/custom_test_file.
 
 ### 4. Real Hardware Deployment
 
-#### ⚠️ Safety Preparation Checklist
+#### Safety Preparation Checklist
 1. **Gantry / Stand:** Suspend the robot on a hoist or place it securely on a central support stand with feet off the ground for initial verification.
 2. **Emergency Stop Ready:** Ensure access to the keyboard running the script (`Ctrl+C` triggers graceful damping shutdown).
 3. **Network Configuration:** Connect an Ethernet cable from your control computer to the Go2 or connect over its internal Wi-Fi. Ensure CycloneDDS is bound to the appropriate network interface.
